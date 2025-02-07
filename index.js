@@ -2,7 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-
+const dotenv = require('dotenv')
+dotenv.config();
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -10,7 +11,7 @@ app.use(bodyParser.json());
 // ✅ Connect to MongoDB
 main().catch(err => console.error('MongoDB Connection Error:', err));
 async function main() {
-  await mongoose.connect('mongodb+srv://porwalpalak10:Sweety123456789@codecluster.qn0or.mongodb.net/?retryWrites=true&w=majority&appName=CodeCluster', { useNewUrlParser: true, useUnifiedTopology: true });
+  await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
   console.log('✅ DB Connected');
 }
 
@@ -24,7 +25,8 @@ const NoteSchema = new mongoose.Schema({
 const Notes = mongoose.model('Notes', NoteSchema);
 
 // ✅ Start Server
-app.listen(8080, () => console.log('🚀 Server started on port 8080'));
+const port = process.env.PORT ||8080
+app.listen(port, () => console.log('🚀 Server started on port 8080'));
 
 // ✅ Get All Notes
 app.get('/getdata', async (req, res) => {
